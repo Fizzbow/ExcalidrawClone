@@ -1,6 +1,10 @@
 # React + TypeScript + Vite
 
-| Clone Excalidraw With React
+> Clone Excalidraw With React
+
+# Feature
+
+![feature](./src/assets/product/feature_1.jpeg)
 
 Currently, two official plugins are available:
 
