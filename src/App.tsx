@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./App.css";
 import rough from "roughjs";
-import { TopBar } from "./components/TopBar";
+import EditPanel from "./pages/EditPanel";
 
 const generator = rough.generator();
 function App() {
@@ -18,7 +18,7 @@ function App() {
   });
   return (
     <>
-      <TopBar />
+      <EditPanel />
       <canvas
         ref={canvasRef}
         width={window.innerWidth}

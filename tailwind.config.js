@@ -15,6 +15,7 @@ export default {
     extend: {
       colors: {
         primary: withOpacity("--color-primary"),
+        greyness: withOpacity("--color-greyness"),
       },
     },
   },
