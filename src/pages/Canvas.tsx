@@ -2,7 +2,6 @@ import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import rough from "roughjs";
 import { Drawable, Options } from "roughjs/bin/core";
 import { ObjectConfig } from "../App";
-import { RoughGenerator } from "roughjs/bin/generator";
 
 // TODO:自适应
 
@@ -30,27 +29,25 @@ const Canvas = ({ config }: Props) => {
     x2: number,
     y2: number,
     config?: ObjectConfig
-  ) => {
+  ): Element => {
     const options: Options = {
       stroke: config?.strokeColor,
       fill: config?.backGroundColor,
     };
     let roughEl: Drawable | undefined = undefined;
 
-    if (config?.shape === "line") {
-      roughEl = generator.line(x1, y1, x2, y2, options);
-    } else if (config?.shape === "rectangle") {
+    if (config?.shape === "rectangle") {
       roughEl = generator.rectangle(x1, y1, x2 - x1, y2 - y1, options);
     } else if (config?.shape === "circle") {
       const horizontalSide = x2 - x1;
       const verticalSide = y2 - y1;
-
       const hypotenuse = Math.sqrt(horizontalSide ** 2 + verticalSide ** 2);
 
       roughEl = generator.circle((x2 + x1) / 2, (y2 + y1) / 2, hypotenuse);
+      // line
+    } else {
+      roughEl = generator.line(x1, y1, x2, y2, options);
     }
-
-    if (!roughEl) return;
 
     return { x1, y1, x2, y2, roughEl };
   };
@@ -62,6 +59,7 @@ const Canvas = ({ config }: Props) => {
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
     const roughCanvas = rough.canvas(canvas);
 
+    if (!elements.length) return;
     elements.forEach(({ roughEl }) => {
       roughCanvas.draw(roughEl);
     });
@@ -69,13 +67,14 @@ const Canvas = ({ config }: Props) => {
 
   function handleMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
     setDrawing(true);
+    if (!config.shape) return;
     const { clientX, clientY } = e;
     const element = createRoughEl(clientX, clientY, clientX, clientY, config);
     setElements((prev) => [...prev, element]);
   }
 
   function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if (!drawing) return;
+    if (!drawing || !config.shape) return;
     const { clientX, clientY } = e;
 
     // 实时更新最后一个点坐标

@@ -4,7 +4,7 @@ import { ButtonConfig, baseButtonConfigs } from "../constants/buttonConfigs";
 
 interface Props {
   shape: string;
-  selectedShape: (shape: string) => void;
+  selectedShape: (shape?: string) => void;
 }
 
 const TopBar = ({ shape, selectedShape }: Props) => {
@@ -27,8 +27,8 @@ const TopBar = ({ shape, selectedShape }: Props) => {
 
   const [buttonConfigs, setButtonConfigs] = useState(initButtonConfigs);
 
-  const toggleSelect = (id: string) => {
-    selectedShape(id);
+  const toggleSelect = (id: string, createEl?: string) => {
+    selectedShape(createEl);
     setButtonConfigs(updatedBtnSelectById(buttonConfigs, id));
   };
   return (
@@ -56,7 +56,7 @@ const TopBar = ({ shape, selectedShape }: Props) => {
                   : "text-greyness"
               }`}
               key={config.id}
-              onClick={() => toggleSelect(config.id)}
+              onClick={() => toggleSelect(config.id, config.createEl)}
             >
               {config.icon}
             </Button>

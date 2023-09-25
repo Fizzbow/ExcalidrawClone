@@ -11,7 +11,7 @@ export interface ObjectConfig {
 }
 
 function App() {
-  const [config, setConfig] = useState<ObjectConfig>({ shape: "handPaper" });
+  const [config, setConfig] = useState<ObjectConfig>({ shape: "line" });
 
   return (
     <>

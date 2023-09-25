@@ -14,6 +14,7 @@ export interface ButtonConfig {
   icon: JSX.Element;
   id: string;
   isSelect: boolean;
+  createEl?: string;
 }
 
 export const baseButtonConfigs: ButtonConfig[] = [
@@ -30,21 +31,25 @@ export const baseButtonConfigs: ButtonConfig[] = [
   {
     icon: <FaRegCircle />,
     id: "circle",
+    createEl: "circle",
     isSelect: false,
   },
   {
     icon: <FaRegSquare />,
     id: "rectangle",
+    createEl: "rectangle",
     isSelect: false,
   },
   {
     icon: <FaLongArrowAltRight />,
     id: "arrowRight",
+    createEl: "createEl",
     isSelect: false,
   },
   {
     icon: <AiOutlineMinus />,
     id: "line",
+    createEl: "line",
     isSelect: false,
   },
   {
