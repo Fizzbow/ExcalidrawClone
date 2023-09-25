@@ -114,6 +114,7 @@ const TopBar = () => {
         items-center
         z-900
         rounded-lg
+        pointer-events-auto
         "
       >
         <div>
