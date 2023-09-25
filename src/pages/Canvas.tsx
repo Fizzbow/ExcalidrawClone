@@ -1,10 +1,11 @@
 import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import rough from "roughjs";
-import useWindowListener from "../hooks/useWindowListenter";
-import { Drawable } from "roughjs/bin/core";
+import { Drawable, Options } from "roughjs/bin/core";
+import { ObjectConfig } from "../App";
+import { RoughGenerator } from "roughjs/bin/generator";
 
 // TODO:自适应
-const generator = rough.generator();
+
 interface Element {
   x1: number;
   y1: number;
@@ -13,13 +14,44 @@ interface Element {
   roughEl: Drawable;
 }
 
-const Canvas = () => {
+interface Props {
+  config: ObjectConfig;
+}
+
+const generator = rough.generator();
+const Canvas = ({ config }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [elements, setElements] = useState<Element[]>([]);
   const [drawing, setDrawing] = useState(false);
 
-  const createRoughEl = (x1: number, y1: number, x2: number, y2: number) => {
-    const roughEl = generator.line(x1, y1, x2, y2);
+  const createRoughEl = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    config?: ObjectConfig
+  ) => {
+    const options: Options = {
+      stroke: config?.strokeColor,
+      fill: config?.backGroundColor,
+    };
+    let roughEl: Drawable | undefined = undefined;
+
+    if (config?.shape === "line") {
+      roughEl = generator.line(x1, y1, x2, y2, options);
+    } else if (config?.shape === "rectangle") {
+      roughEl = generator.rectangle(x1, y1, x2 - x1, y2 - y1, options);
+    } else if (config?.shape === "circle") {
+      const horizontalSide = x2 - x1;
+      const verticalSide = y2 - y1;
+
+      const hypotenuse = Math.sqrt(horizontalSide ** 2 + verticalSide ** 2);
+
+      roughEl = generator.circle((x2 + x1) / 2, (y2 + y1) / 2, hypotenuse);
+    }
+
+    if (!roughEl) return;
+
     return { x1, y1, x2, y2, roughEl };
   };
 
@@ -38,7 +70,7 @@ const Canvas = () => {
   function handleMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
     setDrawing(true);
     const { clientX, clientY } = e;
-    const element = createRoughEl(clientX, clientY, clientX, clientY);
+    const element = createRoughEl(clientX, clientY, clientX, clientY, config);
     setElements((prev) => [...prev, element]);
   }
 
@@ -51,7 +83,7 @@ const Canvas = () => {
       const last = elements.length - 1;
       if (index === last) {
         const { x1, y1 } = elements[last];
-        const el = createRoughEl(x1, y1, clientX, clientY);
+        const el = createRoughEl(x1, y1, clientX, clientY, config);
         return el;
       } else {
         return el;

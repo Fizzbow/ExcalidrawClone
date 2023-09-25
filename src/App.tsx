@@ -1,16 +1,22 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 import EditPanel from "./pages/EditPanel";
 import Canvas from "./pages/Canvas";
-import rough from "roughjs";
-import useWindowListener from "../src/hooks/useWindowListenter";
+
+export interface ObjectConfig {
+  shape: string;
+  strokeColor: string;
+  backGroundColor: string;
+}
 
 function App() {
+  const [config, setConfig] = useState<ObjectConfig>({ shape: "handPaper" });
+
   return (
     <>
-      <EditPanel />
-      <Canvas />
+      <EditPanel config={config} setConfig={setConfig} />
+      <Canvas config={config} />
     </>
   );
 }

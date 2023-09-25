@@ -1,96 +1,15 @@
-import {
-  FaRegHandPaper,
-  FaMousePointer,
-  FaRegCircle,
-  FaRegSquare,
-  FaLongArrowAltRight,
-  FaEraser,
-  FaPencilAlt,
-  FaImages,
-} from "react-icons/fa";
-import { AiOutlineMinus } from "react-icons/ai";
 import { Button } from "../components/button/Button";
 import { useState } from "react";
+import { ButtonConfig, baseButtonConfigs } from "../constants/buttonConfigs";
 
-const initButtonConfigs = [
-  {
-    icon: <FaRegHandPaper />,
-    id: "handPaper",
-    isSelect: false,
-    onClick: () => {
-      console.log("RegHandPaper button clicked");
-    },
-  },
-  {
-    icon: <FaMousePointer />,
-    id: "mousePointer",
-    isSelect: false,
-    onClick: () => {
-      console.log("Mouse Pointer button clicked");
-    },
-  },
-  {
-    icon: <FaRegCircle />,
-    id: "circle",
-    isSelect: false,
-    onClick: () => {
-      console.log("Circle button clicked");
-    },
-  },
-  {
-    icon: <FaRegSquare />,
-    id: "square",
-    isSelect: false,
-    onClick: () => {
-      console.log("Square button clicked");
-    },
-  },
-  {
-    icon: <FaLongArrowAltRight />,
-    id: "arrowRight",
-    isSelect: false,
-    onClick: () => {
-      console.log("arrowRight button clicked");
-    },
-  },
-  {
-    icon: <AiOutlineMinus />,
-    id: "windowMinimize",
-    isSelect: false,
-    onClick: () => {
-      console.log("arrowRight button clicked");
-    },
-  },
-  {
-    icon: <FaPencilAlt />,
-    id: "pencil",
-    isSelect: false,
-    onClick: () => {
-      console.log("image pencil clicked");
-    },
-  },
-  {
-    icon: <FaEraser />,
-    id: "eraser",
-    isSelect: false,
-    onClick: () => {
-      console.log("eraser button clicked");
-    },
-  },
-  {
-    icon: <FaImages />,
-    id: "images",
-    isSelect: false,
-    onClick: () => {
-      console.log("eraser button clicked");
-    },
-  },
-];
+interface Props {
+  shape: string;
+  selectedShape: (shape: string) => void;
+}
 
-const TopBar = () => {
-  const [buttonConfigs, setButtonConfigs] = useState(initButtonConfigs);
-  const toggleSelect = (id: string) => {
-    const updatedSelect = buttonConfigs.map((config) => {
+const TopBar = ({ shape, selectedShape }: Props) => {
+  function updatedBtnSelectById(btnConfigs: ButtonConfig[], id: string) {
+    const updatedSelect = btnConfigs.map((config) => {
       if (config.id === id) {
         config.isSelect = true;
         return config;
@@ -99,7 +18,18 @@ const TopBar = () => {
         return config;
       }
     });
-    setButtonConfigs(updatedSelect);
+    return updatedSelect;
+  }
+
+  function initButtonConfigs() {
+    return updatedBtnSelectById(baseButtonConfigs, shape);
+  }
+
+  const [buttonConfigs, setButtonConfigs] = useState(initButtonConfigs);
+
+  const toggleSelect = (id: string) => {
+    selectedShape(id);
+    setButtonConfigs(updatedBtnSelectById(buttonConfigs, id));
   };
   return (
     <header className="w-full  flex justify-center">
@@ -126,7 +56,7 @@ const TopBar = () => {
                   : "text-greyness"
               }`}
               key={config.id}
-              onClick={() => (config.onClick, toggleSelect(config.id))}
+              onClick={() => toggleSelect(config.id)}
             >
               {config.icon}
             </Button>
