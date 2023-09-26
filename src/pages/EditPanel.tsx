@@ -11,13 +11,14 @@ const EditPanel = ({ config, setConfig }: Props) => {
   return (
     <div className="p-4 w-full h-full absolute flex flex-col gap-4 pointer-events-none">
       <TopBar
-        shape={config.shape}
-        selectedShape={(shape) =>
+        shape={config.shape || ""}
+        selectedShape={(shape) => {
+          shape = shape || "";
           setConfig({
             ...config,
             shape,
-          })
-        }
+          });
+        }}
       />
       <SildBar />
     </div>

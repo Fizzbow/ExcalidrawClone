@@ -6,8 +6,8 @@ import Canvas from "./pages/Canvas";
 
 export interface ObjectConfig {
   shape: string;
-  strokeColor: string;
-  backGroundColor: string;
+  strokeColor?: string;
+  backGroundColor?: string;
 }
 
 function App() {
