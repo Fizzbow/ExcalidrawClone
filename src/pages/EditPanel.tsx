@@ -20,7 +20,15 @@ const EditPanel = ({ config, setConfig }: Props) => {
           });
         }}
       />
-      <SildBar />
+      <SildBar
+        roughStyle={config.style}
+        changeStyle={(style) =>
+          setConfig({
+            ...config,
+            style,
+          })
+        }
+      />
     </div>
   );
 };
